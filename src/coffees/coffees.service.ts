@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 /**
  * Each service is a provider. The main idea of a proivder is that it can inject dependencies.
@@ -36,11 +38,12 @@ export class CoffeesService {
     return coffee;
   }
 
-  create(createCoffeeDto: any) {
+  create(createCoffeeDto: any): CreateCoffeeDto {
     this.coffees.push(createCoffeeDto);
+    return createCoffeeDto;
   }
 
-  update(id: string, updateCoffeeDto: any) {
+  update(id: string, updateCoffeeDto: UpdateCoffeeDto) {
     const existingCoffee = this.findOne(id);
     if (existingCoffee) {
       // update the existing entity
