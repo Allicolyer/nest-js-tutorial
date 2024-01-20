@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Coffee } from './entities/coffee.entity';
 
 /**
  * This decorator provides meta data that nest uses to organize the applications tructure.
@@ -14,5 +16,12 @@ import { CoffeesService } from './coffees.service';
  *
  * Putting the controller and the service here means we can remove them from the AppModule
  */
-@Module({ controllers: [CoffeesController], providers: [CoffeesService] })
+@Module({
+  imports: [
+    // For root is only used once. For feature isused in all other modules
+    TypeOrmModule.forFeature([Coffee]),
+  ],
+  controllers: [CoffeesController],
+  providers: [CoffeesService],
+})
 export class CoffeesModule {}
