@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 @Module({
   // THis module makes it easy to use type orm
   imports: [
@@ -12,10 +11,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       type: 'postgres', // type of our database
       host: 'localhost', // database host
       port: 5432, // database host
-      username: 'postgres', // username
+      username: 'postgres', // username for accessing database
       password: 'postgres', // user password
-      database: 'postgres', // name of our database,
-      autoLoadEntities: true, // models will be loaded automatically
+      database: 'postgres', // name of our database that our application will be using
+      autoLoadEntities: true, // models will be loaded automatically instead of specifing the entities array
       synchronize: true, // your entities will be synced with the database(recommended: disable in prod)
     }),
   ],

@@ -1,8 +1,11 @@
-// An entity represents the relationship between a typescript class and a database model
+// An entity represents the relatinship between a typescript class and a database model
+//
+// With the synchronize: true setting, A SQL table will be generated from all classes with the entity decorator and the metadata they contain
+// This saves on time and is designed for development only
 
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity() // sql table == 'coffee'. If you awnt to use a different name for your table than the name of this class, pass the name into this entity decorator
+@Entity() // sql table == 'coffee'. If you want to use a different name for your table than the name of this class, pass the name into this entity decorator
 export class Coffee {
   // This decorator identifies id as the pimary columns
   @PrimaryGeneratedColumn()
