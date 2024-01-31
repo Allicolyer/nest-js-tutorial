@@ -3,6 +3,7 @@ import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Coffee } from './entities/coffee.entity';
+import { Flavor } from './entities/flavor.entity';
 
 /**
  * This decorator provides meta data that nest uses to organize the applications tructure.
@@ -18,8 +19,8 @@ import { Coffee } from './entities/coffee.entity';
  */
 @Module({
   imports: [
-    // For root is only used once. For feature isused in all other modules
-    TypeOrmModule.forFeature([Coffee]),
+    // For root is only used once. For feature is used in all other modules
+    TypeOrmModule.forFeature([Coffee, Flavor]),
   ],
   controllers: [CoffeesController],
   providers: [CoffeesService],

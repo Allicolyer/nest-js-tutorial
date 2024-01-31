@@ -13,6 +13,11 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       // Performs primitive type conversion. Automaticlly converst he payload to the DTO
       transform: true,
+      transformOptions: {
+        // We no longer have to explicity specify types
+        // with type decorators, such as @Type(() => Number)
+        enableImplicitConversion: true,
+      },
     }),
   );
   await app.listen(3000);
