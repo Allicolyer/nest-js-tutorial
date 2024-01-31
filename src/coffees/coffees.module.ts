@@ -20,7 +20,7 @@ import { Flavor } from './entities/flavor.entity';
 @Module({
   imports: [
     // For root is only used once. For feature is used in all other modules
-    TypeOrmModule.forFeature([Coffee, Flavor]),
+    TypeOrmModule.forFeature([Coffee, Flavor, Event]),
   ],
   controllers: [CoffeesController],
   providers: [CoffeesService],

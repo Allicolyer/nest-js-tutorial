@@ -21,6 +21,10 @@ export class Coffee {
   name: string;
   @Column()
   brand: string;
+
+  // Add a default value here
+  @Column({ default: 0 })
+  recommendations: number;
   // This decorator tells TypeORM that the owner side of the relationship is
   // the coffee entity
   @JoinTable()

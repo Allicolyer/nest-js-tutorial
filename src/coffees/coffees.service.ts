@@ -1,11 +1,12 @@
-import { Injectable, NotFoundException, Query } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { Event } from '../events/entities/event.entity';
 
 /**
  * Each service is a provider. The main idea of a proivder is that it can inject dependencies.
@@ -18,6 +19,7 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
  *
  * Typically in applications, providers and services handle business logic as well as interactions with data sources
  */
+
 @Injectable()
 export class CoffeesService {
   constructor(
@@ -28,6 +30,8 @@ export class CoffeesService {
     private readonly coffeeRepository: Repository<Coffee>,
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
+    // This dataSource object from TypeORM will let us use transaction
+    private readonly dataSource: DataSource,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -103,5 +107,32 @@ export class CoffeesService {
       return existingFlavor;
     }
     return this.flavorRepository.create({ name });
+  }
+
+  async recommendCoffee(coffee: Coffee) {
+    // Create a query runner
+    const queryRunner = this.dataSource.createQueryRunner();
+    // Establish a connection to the database
+    await queryRunner.connect();
+    // Start the transactionprocess
+    await queryRunner.startTransaction();
+    // Wrap the whole thing with a try/catch so that we can roll back if something fails
+    try {
+      coffee.recommendations++;
+
+      const recommendEvent: Event = new Event();
+      recommendEvent.name = 'recommend_coffee';
+      recommendEvent.type = 'coffee';
+      recommendEvent.payload = { coffeeId: coffee.id };
+
+      await queryRunner.manager.save(coffee);
+      await queryRunner.manager.save(recommendEvent);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
