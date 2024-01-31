@@ -17,8 +17,10 @@ export class Coffee {
   // This decorator identifies id as the primary column, also auto increments the value for us
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   name: string;
+
   @Column()
   brand: string;
 
