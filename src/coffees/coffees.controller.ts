@@ -10,14 +10,24 @@ import {
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
-import { create } from 'domain';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 
+/**
+ * When the nest container instantiates the CoffeesController, it first looks to see if there are any dependencies needed.
+ * In our case there is one, the coffee service. When the nest container finds the coffeeService dependency, it performs
+ * a lookup on the coffee service token, which returns the coffee service class. Assuming this provider has a singleton scope, which
+ * is the default behavior of injectable providers, Nest will then either create an instance of CoffeeService, cache it and return it
+ * or if one is already cached, it will return that existing instance.
+ *
+ * If coffee service also has dependencies, which it does, Nest needs to resolve these dependencies in the correct order.
+ * The depdencey graph is resolved from the bottom up. This mechanism relives the developer from having to do this.
+ */
 @Controller('coffees')
 export class CoffeesController {
   /**
    * Nest handles dependencie injection for you by looking at the type of whatever you pass into the constructor's parameters
+   * Here we are requesting the coffeeService in our constructor that tells nest to inject it
    * @param coffeeService
    *
    * the private keyword allows us to declare and initalize the coffeeservice immediately in the same location as well as making it only acessible within the class itself
@@ -41,8 +51,8 @@ export class CoffeesController {
   }
 
   @Post()
-  create(@Body() CreateCoffeeDto: CreateCoffeeDto) {
-    return this.coffeeService.create(CreateCoffeeDto);
+  create(@Body() createCoffeeDto: CreateCoffeeDto) {
+    return this.coffeeService.create(createCoffeeDto);
   }
 
   @Patch(':id')

@@ -20,6 +20,11 @@ import { Event } from '../events/entities/event.entity';
  * Typically in applications, providers and services handle business logic as well as interactions with data sources
  */
 
+/**
+ * The injectable decorator declares a class that can be managed by the nest container
+ * This decorator marks the coffee class as a provider.
+ */
+
 @Injectable()
 export class CoffeesService {
   constructor(
