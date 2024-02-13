@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 @Module({
   // THis module makes it easy to use type orm
   imports: [
@@ -17,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true, // models will be loaded automatically instead of specifing the entities array
       synchronize: false, // your entities will be synced with the database(recommended: disable in prod)
     }),
+    CoffeeRatingModule,
   ],
   controllers: [AppController],
   // Each service is a provider. The main idea of a proivder is that it can inject dependencies.
